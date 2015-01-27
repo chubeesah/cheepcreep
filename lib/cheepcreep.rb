@@ -21,19 +21,19 @@ end
     end
 
     def get_followers(screen_name)
-      result = self.class.get("/users/#{screen_name}/followers")
+      result = self.get("/users/#{screen_name}/followers")
       json = JSON.parse(result.body)
     end
 
     def get_user(screen_name)
-      result = self.class.get("/users/#{screen_name}")
+      result = self.get("/users/#{screen_name}")
       json = JSON.parse(result.body)
     end
 
     def sort_users(screen_name)
-      self.class.get("/users/#{screen_name}")
+      self.get("/users/#{screen_name}")
       json = JSON.parse(result.body)
-
+      User.order(followers: :asc)
     end
   end
 

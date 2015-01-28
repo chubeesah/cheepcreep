@@ -21,12 +21,52 @@ class Github
       json = JSON.parse(result.body)
     end
 
+    def create_repo(opts={})
+      options = {:body => opts.to_json}
+      result = self.class.post("/user/repos", options)
+      JSON.parse(result.body)
+    end
+
+    def get_gists(screen_name, page=1, per_page=20)
+      options = {:query => {:page => page, :per_page => per_page}}
+      result = self.class.get("/users/#{screen_name}/gists", options)
+      puts "#{result.headers['x-ratelimit-remaining']} requests left!"
+      JSON.parse(result.body)
+    end
+
+    def create_gist(opts={})
+      options = {:body => opts.to_json}
+      result = self.class.post("user/gists", options)
+      JSON.parse(result.body)
+    end
+
+    def edit_gist(opts={})
+      options = {:body => opts.to_json}
+      result = self.class.patch("user/gist/", options)
+      JSON.parse(result.body)
+    end
+
+    def delete_gist
+      result = self.class.delete("gists/#{id}")
+      JSON.parse(result.body)
+    end
+
+    def star_gist(id, opts={})
+      options = {:body => opts.to_json}
+      result = self.class.put("/gists/#{id}/star")
+      JSON.parse(result.body)
+    end
+
+    def unstar_gist
+      result = self.class.delete("/gists/#{id}/star")
+      JSON.parse(result.body)
+    end
+
     def get_followers(user = 'redline6561', page=1, per_page=20)
       options = {:query => {:page => page, :per_page => per_page}}
       result = self.class.get("/users/#{user}/followers", options)
       puts "#{result.headers['x-ratelimit-remaining']} requests left!"
       json = JSON.parse(result.body)
-      followers_array
     end
 
     #def sort_users(screen_name)
